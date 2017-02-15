@@ -1,0 +1,10 @@
+*.exe
+*.pdb
+*.pch
+*.sln
+*.vcproj
+*.vcprojx
+*.ncb
+*.ilk
+Debug
+Release
