@@ -13,7 +13,7 @@
 
 void fillArray(int arr[], int arraySize);
 void printArrayInGraphics(int arr[], int arraySize);
-void turnOverElements(int arr[], int indexOfTopElementForCoup, int indexOfLowElementForCoup, int quantityOfElementsForCoup);
+void swapElements(int arr[], int indexOfTopElementForCoup, int indexOfLowElementForCoup, int quantityOfElementsForCoup);
 int analysisAndSortArray(int arr[], int arraySize);
 
 int main()
@@ -92,7 +92,7 @@ int analysisAndSortArray(int arr[], int arraySize)
 			int quantityOfElementsForCoup = indexOfMaxElement;
 			if (indexOfMaxElement != 0)
 			{
-				turnOverElements(arr, indexOfTopElementForCoup, indexOfLowElementForCoup, quantityOfElementsForCoup);
+				swapElements(arr, indexOfTopElementForCoup, indexOfLowElementForCoup, quantityOfElementsForCoup);
 				coupCounter++;
 				system("cls");
 				printArrayInGraphics(arr, arraySize);
@@ -100,7 +100,7 @@ int analysisAndSortArray(int arr[], int arraySize)
 			}
 			indexOfLowElementForCoup = i;
 			quantityOfElementsForCoup = i;
-			turnOverElements(arr, indexOfTopElementForCoup, indexOfLowElementForCoup, quantityOfElementsForCoup);
+			swapElements(arr, indexOfTopElementForCoup, indexOfLowElementForCoup, quantityOfElementsForCoup);
 			coupCounter++;
 			system("cls");
 			printArrayInGraphics(arr, arraySize);
@@ -110,7 +110,7 @@ int analysisAndSortArray(int arr[], int arraySize)
 	return coupCounter;
 }
 
-void turnOverElements(int arr[], int indexOfTopElementForCoup, int indexOfLowElementForCoup, int quantityOfElementsForCoup)
+void swapElements(int arr[], int indexOfTopElementForCoup, int indexOfLowElementForCoup, int quantityOfElementsForCoup)
 {
 	for (int j = 0; j < (quantityOfElementsForCoup + 1) / 2; j++)
 	{

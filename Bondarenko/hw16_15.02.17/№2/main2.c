@@ -14,13 +14,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
 
 #define MATRIX_STRING 5
 #define MATRIX_COLUMN 8
 
 void fillMatrix(int matrix[][MATRIX_COLUMN], int string, int column);
 void printMatrix(int matrix[][MATRIX_COLUMN], int string, int column);
-int printfMenuAndChooseCourseOfMoving();
+enum Сourse printfMenuAndChooseCourseOfMoving();
 void moveMatrix(int matrix[][MATRIX_COLUMN], int string, int column, int step, enum Сourse selection);
 
 enum Сourse
@@ -37,8 +38,7 @@ int main()
 	fillMatrix(matrix, MATRIX_STRING, MATRIX_COLUMN);
 	printf("Vasha matrica:\n\n");
 	printMatrix(matrix, MATRIX_STRING, MATRIX_COLUMN);
-	int toContinue = 1;
-	while (toContinue != 0)
+	while (true)
 	{
 		enum Сourse selection = printfMenuAndChooseCourseOfMoving();
 		printf("Na skol'ko shagov hotite sdvinut': ");
@@ -49,29 +49,20 @@ int main()
 			printf("Ne mozhet byt' oricatel'nym\n");
 			scanf("%i", &step);
 		}
-		switch (selection)
-		{
-		case Right:
-			moveMatrix(matrix, MATRIX_STRING, MATRIX_COLUMN, step, selection);
-			break;
-		case Left:
-			moveMatrix(matrix, MATRIX_STRING, MATRIX_COLUMN, step, selection);
-			break;
-		case Up:
-			moveMatrix(matrix, MATRIX_STRING, MATRIX_COLUMN, step, selection);
-			break;
-		default:
-			moveMatrix(matrix, MATRIX_STRING, MATRIX_COLUMN, step, selection);
-			break;
-		}
+		moveMatrix(matrix, MATRIX_STRING, MATRIX_COLUMN, step, selection);
 		printf("Vot chto poluchilos'!\n\n");
 		printMatrix(matrix, MATRIX_STRING, MATRIX_COLUMN);
 		printf(" 1 - prodolzhit'\n 0 - vyjti\n");
+		int toContinue;
 		scanf("%i", &toContinue);
 		while (toContinue > 1 || toContinue < 0)
 		{
 			printf("Error!\n");
 			scanf("%i", &toContinue);
+		}
+		if (toContinue == 0)
+		{
+			break;
 		}
 	}
 	return 0;
@@ -101,7 +92,7 @@ void printMatrix(int matrix[][MATRIX_COLUMN], int string, int column)
 	}
 }
 
-int printfMenuAndChooseCourseOfMoving()
+enum Сourse printfMenuAndChooseCourseOfMoving()
 {
 	printf("Kuda hotite sdvinut' elementy mstricy?\n %i - napravo\n %i - nalevo\n %i - vverh\n %i - vniz\n", Right, Left, Up, Down);
 	int selection;

@@ -19,13 +19,13 @@ int main()
 	srand(time(0));
 	int startArray[ARRAY_SIZE];
 	int arraySize = ARRAY_SIZE;
-	fillArray(&startArray, &arraySize);
+	fillArray(startArray, &arraySize);
 	printf("Vash Massiv:\n");
-	printArray(&startArray, &arraySize);
+	printArray(startArray, &arraySize);
 	int finalArray[ARRAY_SIZE];
-	copyArray(&startArray, &finalArray, &arraySize);
+	copyArray(startArray, finalArray, &arraySize);
 	printf("\nCopiruem...\n\nVash novyj massiv:\n");
-	printArray(&finalArray, &arraySize);
+	printArray(finalArray, &arraySize);
 	return 0;
 }
 

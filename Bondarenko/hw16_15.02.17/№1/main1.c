@@ -7,32 +7,34 @@
 
 #include <stdio.h>
 
-#define STRING 4
+#define ROW 4
 #define COLUMN 4
 
-void fillMatrix(int matrix[][COLUMN], int string, int column, int buffer);
-void printMatrix(int matrix[][COLUMN], int string, int column);
+void fillMatrix(int matrix[][COLUMN], int row, int column);
+void printMatrix(int matrix[][COLUMN], int row, int column);
 
 int main()
 {
-	int matrix[STRING][COLUMN];
-	printf("Davajte zapolnim matricu!\nVvedite chislo: ");
+	int matrix[ROW][COLUMN];
+	printf("Davajte zapolnim matricu!\nVvedite chislo(ot -6 do 20): ");
 	int userNumber;
 	scanf("%i", &userNumber);
 	while (userNumber > 20 || userNumber < -6)
 	{
-		printf("Slishkom bol'shoe chislo\n");
+		printf(userNumber > 20 ? "Slishkom bol'shoe chislo.\n" : "Slishkom malen'koje chislo.\n");
 		scanf("%i", &userNumber);
 	}
-	fillMatrix(matrix, STRING, COLUMN, userNumber);
+	matrix[0][0] = userNumber;
+	fillMatrix(matrix, ROW, COLUMN);
 	printf("Vot chto poluchilos'!\n");
-	printMatrix(matrix, STRING, COLUMN);
+	printMatrix(matrix, ROW, COLUMN);
 	return 0;
 }
 
-void fillMatrix(int matrix[][COLUMN], int string, int column, int buffer)
+void fillMatrix(int matrix[][COLUMN], int row, int column)
 {
-	for (int i = 0; i < string; i++)
+	int buffer = matrix[0][0];
+	for (int i = 0; i < row; i++)
 	{
 		for (int j = 0; j < column; j++)
 		{
@@ -42,9 +44,9 @@ void fillMatrix(int matrix[][COLUMN], int string, int column, int buffer)
 	}
 }
 
-void printMatrix(int matrix[][COLUMN], int string, int column)
+void printMatrix(int matrix[][COLUMN], int row, int column)
 {
-	for (int i = 0; i < string; i++)
+	for (int i = 0; i < row; i++)
 	{
 		for (int j = 0; j < column; j++)
 		{

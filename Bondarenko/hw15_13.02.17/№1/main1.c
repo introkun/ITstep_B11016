@@ -6,20 +6,22 @@
    • Вывести список пользователей
    • Выход */
 
+
+
 #include <stdio.h>
 #include <limits.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define ARRAY_SIZE 20
 
-void clearChar(char toContinue);
+void clearChar();
 void arraysFormat(int icqArray[], int phoneNubmersArray[], int arraysSize);
 int printMenuAndSelectAction();
 void printArrays(int icqArray[], int phoneNubmersArray[], int firstFreeCellForRecording);
 void addUser(int icqArray[], int phoneNubmersArray[], int firstFreeCellForRecording);
 void deleteUser(int icqArray[], int phoneNubmersArray[], int firstFreeCellForRecording);
-void sortByIcq(int icqArray[], int phoneNubmersArray[], int firstFreeCellForRecording);
-void sortByNumbers(int icqArray[], int phoneNubmersArray[], int firstFreeCellForRecording);
+void sort(int icqArray[], int phoneNubmersArray[], int firstFreeCellForRecording, enum Sorting sortBy);
 
 enum Menu
 {
@@ -27,10 +29,16 @@ enum Menu
 	PrintArrays,
 	AddUser,
 	DeleteUser,
-	IcqSort,
-	PhoneSort,
+	Sort,
 	Format,
-	End
+	End1
+};
+
+enum Sorting
+{
+	Icq = 1,
+	PhoneNumbers,
+	End2
 };
 
 int main()
@@ -39,8 +47,8 @@ int main()
 	int phoneNubmersArray[ARRAY_SIZE];
 	arraysFormat(icqArray, phoneNubmersArray, ARRAY_SIZE);
 	int firstFreeCellForRecording = 0;
-	int forExit = 1;
-	while (forExit != 0)
+	bool toContinue = true;
+	while (toContinue)
 	{
 		enum Menu selection = printMenuAndSelectAction();
 		switch (selection)
@@ -79,12 +87,16 @@ int main()
 				firstFreeCellForRecording--;
 			}
 			break;
-		case IcqSort:
-			sortByIcq(icqArray, phoneNubmersArray, firstFreeCellForRecording);
-			printf("Spisok otsortirovan.\n");
-			break;
-		case PhoneSort:
-			sortByNumbers(icqArray, phoneNubmersArray, firstFreeCellForRecording);
+		case Sort:
+			printf("Kak hotite otsortirovat':\n %i - po ICQ\n %i - po nomeram telefonov\n", Icq, PhoneNumbers);
+			enum Sorting sortBy;
+			scanf("%i", &sortBy);
+			while (sortBy >= End2 || sortBy < 0)
+			{
+				printf("Error!\n");
+				scanf("%i", &sortBy);
+			}
+			sort(icqArray, phoneNubmersArray, firstFreeCellForRecording, sortBy);
 			printf("Spisok otsortirovan.\n");
 			break;
 		case Format:
@@ -103,23 +115,24 @@ int main()
 			}
 			break;
 		default:
-			forExit = 0;
+			toContinue = false;
 			break;
 		}
-		if (forExit != 0)
+		if (toContinue != false)
 		{
 			printf("\nNazhmite 'Enter' chtoby prodolzhit'.\n");
 			char toContinue;
 			scanf("%c", &toContinue);
-			clearChar(toContinue);
+			clearChar();
 			system("cls");
 		}
 	}
 	return 0;
 }
 
-void clearChar(char toContinue)
+void clearChar()
 {
+	int toContinue;
 	do {
 		toContinue = getchar();
 	} while (toContinue != '\n' && toContinue != EOF);
@@ -137,10 +150,10 @@ void arraysFormat(int icqArray[], int phoneNubmersArray[], int arraysSize)
 int printMenuAndSelectAction()
 {
 	printf("\tSpravochnik:\n\n %i - vyvesti spisok polzovatelej\n %i - dobavit' pol'zovatelja\n %i - udalit' pol'zovatelja\n", PrintArrays, AddUser, DeleteUser);
-	printf(" %i - otsortirovat' po ICQ\n %i - otsortirovat' po nomeram telefona\n %i - otformatirovat' spisok\n %i - vyjti\n", IcqSort, PhoneSort, Format, Exit);
+	printf(" %i - otsortirovat' spisok\n %i - otformatirovat' spisok\n %i - vyjti\n", Sort, Format, Exit);
 	int selection;
 	scanf("%i", &selection);
-	while (selection >= End || selection < 0)
+	while (selection >= End1 || selection < 0)
 	{
 		printf("Error!\n");
 		scanf("%i", &selection);
@@ -184,48 +197,48 @@ void deleteUser(int icqArray[], int phoneNubmersArray[], int firstFreeCellForRec
 	phoneNubmersArray[firstFreeCellForRecording - 1] = INT_MIN;
 }
 
-void sortByIcq(int icqArray[], int phoneNubmersArray[], int firstFreeCellForRecording)
-{
-	for (int i = 0; i < firstFreeCellForRecording - 1; i++)
-	{
-		if (icqArray[i] > icqArray[i + 1])
-		{
-			int icqBuffer = icqArray[i + 1];
-			int phoneNubmerBuffer = phoneNubmersArray[i + 1];
-			icqArray[i + 1] = icqArray[i];
-			phoneNubmersArray[i + 1] = phoneNubmersArray[i];
-			int j = i;
-			while (j > 0 && icqBuffer < icqArray[j - 1])
-			{
-				icqArray[j] = icqArray[j - 1];
-				phoneNubmersArray[j] = phoneNubmersArray[j - 1];
-				j--;
-			}
-			icqArray[j] = icqBuffer;
-			phoneNubmersArray[j] = phoneNubmerBuffer;
-		}
-	}
-}
 
-void sortByNumbers(int icqArray[], int phoneNubmersArray[], int firstFreeCellForRecording)
+void sort(int icqArray[], int phoneNubmersArray[], int firstFreeCellForRecording, enum Sorting sortBy)
 {
 	for (int i = 0; i < firstFreeCellForRecording - 1; i++)
 	{
-		if (phoneNubmersArray[i] > phoneNubmersArray[i + 1])
+		if (sortBy == Icq)
 		{
-			int icqBuffer = icqArray[i + 1];
-			int phoneNubmerBuffer = phoneNubmersArray[i + 1];
-			icqArray[i + 1] = icqArray[i];
-			phoneNubmersArray[i + 1] = phoneNubmersArray[i];
-			int j = i;
-			while (j > 0 && phoneNubmerBuffer < phoneNubmersArray[j - 1])
+			if (icqArray[i] > icqArray[i + 1])
 			{
-				icqArray[j] = icqArray[j - 1];
-				phoneNubmersArray[j] = phoneNubmersArray[j - 1];
-				j--;
+				int icqBuffer = icqArray[i + 1];
+				int phoneNubmerBuffer = phoneNubmersArray[i + 1];
+				icqArray[i + 1] = icqArray[i];
+				phoneNubmersArray[i + 1] = phoneNubmersArray[i];
+				int j = i;
+				while (j > 0 && icqBuffer < icqArray[j - 1])
+				{
+					icqArray[j] = icqArray[j - 1];
+					phoneNubmersArray[j] = phoneNubmersArray[j - 1];
+					j--;
+				}
+				icqArray[j] = icqBuffer;
+				phoneNubmersArray[j] = phoneNubmerBuffer;
 			}
-			icqArray[j] = icqBuffer;
-			phoneNubmersArray[j] = phoneNubmerBuffer;
+		}
+		else
+		{
+			if (phoneNubmersArray[i] > phoneNubmersArray[i + 1])
+			{
+				int icqBuffer = icqArray[i + 1];
+				int phoneNubmerBuffer = phoneNubmersArray[i + 1];
+				icqArray[i + 1] = icqArray[i];
+				phoneNubmersArray[i + 1] = phoneNubmersArray[i];
+				int j = i;
+				while (j > 0 && phoneNubmerBuffer < phoneNubmersArray[j - 1])
+				{
+					icqArray[j] = icqArray[j - 1];
+					phoneNubmersArray[j] = phoneNubmersArray[j - 1];
+					j--;
+				}
+				icqArray[j] = icqBuffer;
+				phoneNubmersArray[j] = phoneNubmerBuffer;
+			}
 		}
 	}
 }

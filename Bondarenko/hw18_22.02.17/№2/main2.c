@@ -12,19 +12,19 @@
 
 void fillArray(int* array, int* arraySize);
 void printArray(int* array, int* arraySize);
-void reverseArray(int* array, int* arraySize);
+void swapElements(int* array, int* arraySize);
 
 int main()
 {
 	srand(time(0));
 	int array[ARRAY_SIZE];
 	int arraySize = ARRAY_SIZE;
-	fillArray(&array, &arraySize);
+	fillArray(array, &arraySize);
 	printf("Vash Massiv:\n");
-	printArray(&array, &arraySize);
-	reverseArray(&array, &arraySize);
-	printf("\nReversiruem massiv...\n\nVot chto poluchilos:\n");
-	printArray(&array, &arraySize);
+	printArray(array, &arraySize);
+	swapElements(array, &arraySize);
+	printf("\n\nVot chto poluchilos:\n");
+	printArray(array, &arraySize);
 	return 0;
 }
 
@@ -44,7 +44,7 @@ void printArray(int* array, int* arraySize)
 	}
 }
 
-void reverseArray(int* array, int* arraySize)
+void swapElements(int* array, int* arraySize)
 {
 	for (int i = 0; i < *arraySize / 2; i++)
 	{
