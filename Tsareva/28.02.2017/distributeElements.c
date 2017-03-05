@@ -8,8 +8,8 @@
 #define COUNT_ROW 3
 #define COUNT_COLUMN 5
 
-void printMatrix(int signed const const matrix[][COUNT_COLUMN], int const* const countRow, int const* const countColumn);
-void distributeArray(int signed const const matrix[][5], int const* const countRow, int const* const countColumn,
+void printMatrix(int signed const (*matrix)[COUNT_COLUMN], int const* const countRow, int const* const countColumn);
+void distributeArray(int signed const (*matrix)[5], int const* const countRow, int const* const countColumn,
 	int* arrayPositiveElements, int* arrayNegativeElements, int* arrayNullElements);
 void printArray(int const* const array, int const* const column);
 
@@ -35,7 +35,7 @@ int main()
 	printArray(arrayNullElements, &countColumn);
 }
 
-void printMatrix(int signed const const matrix[][COUNT_COLUMN], int const* const countRow, int const*  const countColumn)
+void printMatrix(int signed const (*matrix)[COUNT_COLUMN], int const* const countRow, int const*  const countColumn)
 {
 	for (int i = 0; i < *countRow; i++)
 	{
@@ -46,7 +46,7 @@ void printMatrix(int signed const const matrix[][COUNT_COLUMN], int const* const
 	}
 }
 
-void distributeArray(int signed const const matrix[][5], int const* const countRow,
+void distributeArray(int signed const (*matrix)[5], int const* const countRow,
 	int const* const countColumn, int* arrayPositiveElements, int* arrayNegativeElements, int* arrayNullElements)
 {
 	int countZero = 0;
@@ -66,7 +66,6 @@ void distributeArray(int signed const const matrix[][5], int const* const countR
 				*(arrayPositiveElements + countPositive) = *(*(matrix + i) + j);
 				countPositive++;
 			}
-
 			if (*(*(matrix + i) + j) == 0)
 			{
 				*(arrayNullElements + countZero) = *(*(matrix + i) + j);
