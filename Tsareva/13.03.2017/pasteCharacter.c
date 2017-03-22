@@ -38,27 +38,27 @@ void pasteCharacter(char* str, char* str2, int* len)
 	printf("Enter character, what you want paste:\n");
 	scanf("%c", &pasteChar);
 
-	int numberCharacter;
+	int position;
 	printf("Please, enter number of character, that you want to paste: ");
-	scanf("%i", &numberCharacter);
+	scanf("%i", &position);
 
-	while (numberCharacter > *len)
+	while (position > *len)
 	{
 		printf("Your string contains %i character, please enter number of character: ", *len);
-		scanf("%i", &numberCharacter);
+		scanf("%i", &position);
 	}
 
 	for (int i = 0; i < *len + 2; i++)
 	{
-		if (i < numberCharacter - 1)
+		if (i < position - 1)
 		{
 			str2[i] = str[i];
 		}
-		else if (i == numberCharacter - 1)
+		else if (i == position - 1)
 		{
 			str2[i] = pasteChar;
 		}
-		else if (i > numberCharacter - 1 && i < *len + 1)
+		else if (i > position - 1 && i < *len + 1)
 		{
 			str2[i] = str[i - 1];
 		}
