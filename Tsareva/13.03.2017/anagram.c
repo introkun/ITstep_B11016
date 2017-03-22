@@ -1,4 +1,4 @@
-﻿/*Написать функцию, которая определяет, является ли введенное слово анаграммой*/
+/*Написать функцию, которая определяет, является ли введенное слово анаграммой*/
 
 #include <stdio.h>
 
@@ -31,16 +31,15 @@ int findLength(char* str1)
 		str1++;
 		count++;
 	}
-	str1 = str1 - count;
 	return count;
 }
 
 void flipString(char* str1, char* str2, int length)
 {
 	int j = length;
-	for (int i = 0; i <= length + 1; i++)
+	for (int i = 0; i <= length/2 + 1; i++)
 	{
-		if (i == length)
+		if (i == length/2)
 		{
 			str2[i] = 0;
 		}
@@ -50,7 +49,6 @@ void flipString(char* str1, char* str2, int length)
 		}
 		j--;
 	}
-	str1 = str1 - length;
 }
 
 void compareStrings(char* str1, char* str2, int length)
@@ -70,7 +68,7 @@ void compareStrings(char* str1, char* str2, int length)
 		str2++;
 	}
 	str1 = str1 - countCoincidence;
-	if (countCoincidence == length)
+	if (countCoincidence == length/2)
 	{
 		printf("Word: %s is the anagram\n", str1);
 	}
