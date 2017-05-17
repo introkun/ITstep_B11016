@@ -1,4 +1,4 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -83,6 +83,18 @@ char* getRecipeName()
 	return recipeName;
 }
 
+bool confirmSelection()
+{
+	int choice;
+	scanf("%i", &choice);
+	while (choice < 0 || choice > 1)
+	{
+		printf("There is no such item!\n");
+		scanf("%i", &choice);
+	}
+	return choice;
+}
+
 void lookRecipe(struct Recipe* Recipes, int recipesQuantity)
 {
 	printf("\nEnter the name of recipe which you want to look: ");
@@ -94,7 +106,7 @@ void lookRecipe(struct Recipe* Recipes, int recipesQuantity)
 		{
 			system("cls");
 			printf("\t\t\t\t%s\n\n Text: ", recipeName);
-			sprintf(recipeName, "%s%i.recipe", recipeName, Recipes[i].Rating);
+			sprintf(recipeName, "%s%i.recipe", recipeName, Recipes[i].Rating == 10? 0 : Recipes[i].Rating);
 			FILE* seeFile = fopen(recipeName, "rb");
 
 			char* strBuff = malloc(256);
@@ -173,7 +185,7 @@ void addRecipe(struct Recipe* Recipes, int* recipesCounter, int* changingRecipes
 		printf("please enter rating(1 - 10)!\n");
 		scanf("%i", &recipeRating);
 	}
-	sprintf(fileStr, "%s%i.recipe", recipeName, recipeRating == 10? recipeRating - 10 : recipeRating);
+	sprintf(fileStr, "%s%i.recipe", recipeName, recipeRating == 10 ? 0 : recipeRating);
 	FILE* newRecipe = fopen(fileStr, "wb");
 	char* pointerOnRecipeText = recipeText;
 	do
@@ -181,9 +193,9 @@ void addRecipe(struct Recipe* Recipes, int* recipesCounter, int* changingRecipes
 		fwrite(recipeText, 256, 1, newRecipe);
 		recipeText += 256;
 	} while (*recipeText != -51 && recipeText - pointerOnRecipeText < RECIPE_TEXT_SIZE - 256);
-	free(fileStr);
 	free(pointerOnRecipeText);
 	fclose(newRecipe);
+	free(fileStr);
 	Recipes[*recipesCounter].Rating = recipeRating;
 	Recipes[*recipesCounter].Name = recipeName;
 	SYSTEMTIME time;
@@ -205,20 +217,16 @@ void editRecipe(struct Recipe* Recipes, int recipesCounter)
 	{
 		if (strcmp(Recipes[i].Name, recipeName) == 0)
 		{
+			system("cls");
+			printf("\t\t%s\n\n", Recipes[i].Name);
 			printf("Enter new recipe text(%i symbols): ", RECIPE_TEXT_SIZE - 1);
 			char* newRecipeText = malloc(RECIPE_TEXT_SIZE);
 			fgets(newRecipeText, RECIPE_TEXT_SIZE, stdin);
-
-			printf("Save changes?\n 1 - yes\t 0 - no\n");
-			int choice;
-			scanf("%i", &choice);
-			while (choice < 0 || choice > 1)
+			printf("Save changes?\n 1 - yes\t 0 - no\n");		
+			if (!confirmSelection())
 			{
-				printf("There is no such item!\n");
-				scanf("%i", &choice);
-			}
-			if (choice == 0)
-			{
+				free(recipeName);
+				free(newRecipeText);
 				return;
 			}
 			sprintf(recipeName, "%s%i.recipe", Recipes[i].Name, Recipes[i].Rating);
@@ -234,7 +242,7 @@ void editRecipe(struct Recipe* Recipes, int recipesCounter)
 			break;
 		}
 	}
-	printf(i == recipesCounter? "Recipe not found\n" : "Recipe changed\n\n");
+	printf(i == recipesCounter ? "Recipe not found\n" : "Recipe changed\n\n");
 	printf("Press enter to continue...");
 	clearChar();
 	free(recipeName);
@@ -250,16 +258,10 @@ void deleteRecipe(struct Recipe* Recipes, int* recipesCounter, int* changingReci
 	{
 		if (strcmp(Recipes[i].Name, recipeName) == 0)
 		{
-			printf("You sure?\n 1 - yes\t 0 - no\n");
-			int choice;
-			scanf("%i", &choice);
-			while (choice < 0 || choice > 1)
+			printf("You sure wont delete?\n 1 - yes\t 0 - no\n");
+			if (!confirmSelection())
 			{
-				printf("There is no such item!\n");
-				scanf("%i", &choice);
-			}
-			if (choice == 0)
-			{
+				free(recipeName);
 				return;
 			}
 			sprintf(recipeName, "%s%i.recipe", Recipes[i].Name, Recipes[i].Rating);
@@ -278,7 +280,7 @@ void deleteRecipe(struct Recipe* Recipes, int* recipesCounter, int* changingReci
 		}
 	}
 	free(recipeName);
-	printf(i == *recipesCounter ? "Recipe not found.\n": "Recipe deleted.\n");
+	printf(i == *recipesCounter ? "Recipe not found.\n" : "Recipe deleted.\n");
 	printf("\n Press enter to continue...");
 	clearChar();
 }
